@@ -2,9 +2,9 @@
 
 '''
 
-import requests, jsonify
+import requests
 import json
-from flask import Flask, jsonify
+
 def emotion_detector(text_to_analyse):
     # URL of the emotion analysis service
     url = 'https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict'
@@ -17,19 +17,24 @@ def emotion_detector(text_to_analyse):
 
     # Sending a POST request to the emotion analysis API
     response = requests.post(url, json=myobj, headers=header)
-    return (response.text)
-    '''
-    data = response.json()
-    emotion_predictor = data.get('emotionPredictions')
-    
-    parsed_emotions = []
-    for emotion in emotion_predictor:
-        parsed_emotions.append({emotion})
-    '''
-    return jsonify(emotion_predictor)  # Return the response text from the API
-    
-        # Parsing the JSON response from the API
-   # formatted_response = json.loads(response.text)
+    formatted_response = json.loads(response.text)
 
-    #  I AM STUCK!
+    emotionPredictions = []
+    emotions = []
+    for key, value in formatted_response.items():
+        if key == "emotionPredictions":
+            emotionPredictions = value
+           # print(f"Key: {key}, Value: {emotionPredictions}") 
+        break
+    prediction = emotionPredictions[0]
+    for key, value in prediction.items():
+        if key == "emotion":
+            emotions = value
+           # print(f"Key: {key}, Value: {emotionPredictions}") 
+        break
     
+    key_value_pairs =[]
+    for k, v in emotions.items():
+            key_value_pairs.append((k,v))
+   # print(f"---------emotions {key_value_pairs}-----")
+    return (key_value_pairs)
