@@ -17,24 +17,18 @@ def emotion_detector(text_to_analyse):
 
     # Sending a POST request to the emotion analysis API
     response = requests.post(url, json=myobj, headers=header)
+   # return (response.text)
     formatted_response = json.loads(response.text)
-
-    emotionPredictions = []
-    emotions = []
-    for key, value in formatted_response.items():
-        if key == "emotionPredictions":
-            emotionPredictions = value
-           # print(f"Key: {key}, Value: {emotionPredictions}") 
-        break
-    prediction = emotionPredictions[0]
-    for key, value in prediction.items():
-        if key == "emotion":
-            emotions = value
-           # print(f"Key: {key}, Value: {emotionPredictions}") 
-        break
+    predictions = formatted_response["emotionPredictions"]
+    prediction = predictions[0]
+    emotions = prediction["emotion"]
     
-    key_value_pairs =[]
-    for k, v in emotions.items():
-            key_value_pairs.append((k,v))
-   # print(f"---------emotions {key_value_pairs}-----")
-    return (key_value_pairs)
+    max_score = 0 
+    dominant_emotion = ""
+    for key, value in emotions.items():
+        if value > max_score:
+            max_score = value
+            dominant_emotion = key
+    #print(f" Found dominant {dominant_emotion} @ {max_score}")
+    emotions['dominant_emotion']=dominant_emotion
+    return (emotions)
