@@ -22,19 +22,18 @@ def emotion_measurement():
     text_to_analyze = request.args.get('textToAnalyze')
 
     # Pass the text to the sentiment_analyzer function and store the response
-    response = emotion_detector(text_to_analyze)
+    emotions = emotion_detector(text_to_analyze)
 
-    # Extract the dominant emotion and its score from the response
-    dominant_emotion = ""
-    for key, value in response.items():
-        if key == 'dominant_emotion':
-            dominant_emotion = value
-
-    # Check if the label is None, indicating an error or invalid input
-    if dominant_emotion is None:
+    # Examine the dominant emotion and its score from the response
+    if emotions['dominant_emotion'] is None:
         return "Invalid input! Try again."
-    # Return a formatted string with the sentiment label and score
-    return f"For the given statement, the system response is {response} The dominant emotion is {dominant_emotion}."
+
+    return_result = f"For the given statement, the system response is 'anger': \
+                {emotions['anger']}, 'disgust': {emotions['disgust']}, \
+                'fear': {emotions['fear']}, 'joy': {emotions['joy']}, \
+                'sadness': {emotions['sadness']}. The dominant emotion is \
+                {emotions['dominant_emotion']}."
+    return return_result
 
 @app.route("/")
 def render_index_page():

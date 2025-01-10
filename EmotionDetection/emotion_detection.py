@@ -1,5 +1,5 @@
 '''
-
+    define emotion dectector 
 '''
 
 import requests
@@ -20,16 +20,17 @@ def emotion_detector(text_to_analyse):
    # return (response.text)
 
     formatted_response = json.loads(response.text)
-    emotions = formatted_response["emotionPredictions"][0]["emotion"]
+    
     if response.status_code == 400:
-        formatted_response = { 'anger': None,
+        emotions = { 'anger': None,
                                 'disgust': None,
                                 'fear':None,
                                 'joy':None,
                                 'sadness':None,
                                 'dominant_emotion':None} 
+        return (emotions)
     else:
-        #emotions = formatted_response["emotionPredictions"][0]["emotion"]
+        emotions = formatted_response["emotionPredictions"][0]["emotion"]
         #prediction = predictions[0]
         #emotions = prediction["emotion"]
         max_score = 0 
