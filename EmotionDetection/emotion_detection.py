@@ -20,10 +20,7 @@ def emotion_detector(text_to_analyse):
    # return (response.text)
 
     formatted_response = json.loads(response.text)
-    print(f" ***** Retunred Status Code {response.status_code}")
-    #print (f"--------- {formatted_response}")
-    #return(formatted_response)
-
+    
     if response.status_code == 200:
         predictions = formatted_response["emotionPredictions"]
         prediction = predictions[0]
